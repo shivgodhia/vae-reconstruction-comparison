@@ -107,3 +107,4 @@ venv.bak/
 # My addition
 stud_data.csv
 .gitignore
+venv/
