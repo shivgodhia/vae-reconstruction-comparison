@@ -5,6 +5,7 @@ from keras import backend as K
 from keras.models import Model
 from keras.losses import mean_squared_error
 import numpy as np
+from keras import metrics
 
 from encoder import Encoder
 
@@ -93,5 +94,5 @@ class VAE(Encoder):
                 loss_value = K.mean(xent_loss + divergence)
             return loss_value
 
-        self._model.compile(optimizer='Adam', loss=_model_loss)
+        self._model.compile(optimizer='Adam', loss=_model_loss, metrics='mse')
         self._model.summary()

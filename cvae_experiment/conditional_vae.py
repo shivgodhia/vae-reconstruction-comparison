@@ -4,6 +4,7 @@ from keras.layers import (Input, Dropout, Concatenate,
 from keras import backend as K
 from keras.models import Model
 from keras.losses import mean_squared_error
+from keras.metrics import mse as mse_metric
 import numpy as np
 
 from encoder import Encoder
@@ -82,9 +83,12 @@ class CVAE(Encoder):
             x = Dense(dim, activation='linear')(x)
             x = Activation(activation)(x)
             x = Dropout(drop_out)(x)
-        ouputs = Dense(n_features, activation='relu')(x)
+        outputs = Dense(n_features, activation='relu')(x)
 
-        self._model = Model([X, cond], ouputs)
+        self._model = Model([X, cond], outputs)
+        
+        def mse(input, output):
+            return mse_metric(X, outputs)
 
         def _model_loss(x, x_decoded_mean):
             xent_loss = mean_squared_error(X, x_decoded_mean)
@@ -98,5 +102,5 @@ class CVAE(Encoder):
                 loss_value = K.mean(xent_loss + divergence)
             return loss_value
 
-        self._model.compile(optimizer='Adam', loss=_model_loss)
+        self._model.compile(optimizer='Adam', loss=_model_loss, metrics=mse)
         self._model.summary()
