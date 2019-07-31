@@ -1,7 +1,6 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from keras import metrics
-from matplotlib import pyplot as plt
 from vae import VAE
 from conditional_vae import CVAE
 import utils as u
@@ -35,7 +34,7 @@ u.plot_latent_space(X, vae,
                     s=1) 
 
 
-plt.plot(vae.history.history['mse'])
+
 
 # compare the reconstruction loss between the VAE and the CVAE. 
 # My assumption is that the CVAE allows a better reconstruction of the original parameters.
