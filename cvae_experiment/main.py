@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from keras import metrics
-import matplotlib as plot
+from matplotlib import pyplot as plt
 from vae import VAE
 from conditional_vae import CVAE
 import utils as u
