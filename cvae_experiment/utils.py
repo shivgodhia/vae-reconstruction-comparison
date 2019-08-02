@@ -88,5 +88,5 @@ def plot_training_history(keras_models, metric, labels):
     labels: list of model names
     '''
     for model, label in zip(keras_models, labels):
-        plt.plot(vae.history.history[metric])
+        plt.plot(model._model.history.history[metric])
     return

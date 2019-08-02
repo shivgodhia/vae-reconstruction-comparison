@@ -87,8 +87,9 @@ class CVAE(Encoder):
 
         self._model = Model([X, cond], outputs)
         
-        def mse(input, output):
-            return mse_metric(X, outputs)
+        # custom metric
+        # def mse(input, output):
+        #     return mse_metric(X, output)
 
         def _model_loss(x, x_decoded_mean):
             xent_loss = mean_squared_error(X, x_decoded_mean)
@@ -102,5 +103,7 @@ class CVAE(Encoder):
                 loss_value = K.mean(xent_loss + divergence)
             return loss_value
 
-        self._model.compile(optimizer='Adam', loss=_model_loss, metrics=mse)
+        # self._model.compile(optimizer='Adam', loss=_model_loss, metrics=[mse])
+        # TODO: need to change the MSE for this to the custom model above
+        self._model.compile(optimizer='Adam', loss=_model_loss, metrics=['mse'])
         self._model.summary()

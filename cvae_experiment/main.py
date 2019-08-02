@@ -10,14 +10,11 @@ stud_data = pd.read_csv('stud_data.csv')
 
 X, cond, sub_df = u.build_training_set(stud_data, 300)
 
-X_train, X_test, cond_train, cond_test = train_test_split(X, cond,
-                                                          test_size=0.2)
+X_train, X_test, cond_train, cond_test = train_test_split(X, cond,test_size=0.2)
 
 # Instanciate and train a cvae with kl loss
 cvae = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='kl')
-cvae._model.fit(x=[X_train, cond_train], y=X_train,
-                validation_data=([X_test, cond_test], X_test),
-                epochs=3, batch_size=1000)
+cvae._model.fit(x=[X_train, cond_train], y=X_train, validation_data=([X_test, cond_test], X_test), epochs=3, batch_size=1000)
 
 
 # Instanciate and train a vae with mmd losst
@@ -32,7 +29,6 @@ u.plot_latent_space([X, cond], cvae,
 u.plot_latent_space(X, vae,
                     [sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'VAE_mmd',
                     s=1) 
-
 
 
 

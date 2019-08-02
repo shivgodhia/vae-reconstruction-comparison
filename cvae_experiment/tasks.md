@@ -16,3 +16,14 @@ Here is a suggested list of sub-tasks:
 * Identify the relevant layers in the current architectures. (We only want to compare the input numerical parameters and the reconstructed output, not the one hot encoded vectors )
 * Implement the reconstruction metric.
 * Compare the reconstruction score between vae and cvae.
+
+
+
+## Slides for iX Presentation
+
+* can explain in our own words what a vae is, what a cvae is, etc
+* ran experiment for DP and want to explain whether we should or should not replace current VAE for the client (with a CVAE)
+* no metric has really been found to fully evaluate the quality of the latent space (metric should be correlated w quality)
+* what we are doing now is to plot random latent spaces from random weld locations
+* CVAE may not improve the separation but it improves the MSE
+* representation in the latent space is better in quality using CVAE
