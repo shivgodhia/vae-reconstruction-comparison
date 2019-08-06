@@ -17,8 +17,6 @@ Here is a suggested list of sub-tasks:
 * Implement the reconstruction metric.
 * Compare the reconstruction score between vae and cvae.
 
-
-
 ## Slides for iX Presentation
 
 * can explain in our own words what a vae is, what a cvae is, etc
@@ -26,4 +24,4 @@ Here is a suggested list of sub-tasks:
 * no metric has really been found to fully evaluate the quality of the latent space (metric should be correlated w quality)
 * what we are doing now is to plot random latent spaces from random weld locations
 * CVAE may not improve the separation but it improves the MSE
-* representation in the latent space is better in quality using CVAE
+* representation in the latent space is better in quality using VAE
