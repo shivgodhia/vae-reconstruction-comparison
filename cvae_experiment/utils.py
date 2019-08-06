@@ -87,8 +87,9 @@ def plot_training_history(keras_models, metric, labels, title):
     metric: the name of the metric to plot
     labels: list of model names
     '''
+    fig = plt.figure(figsize=(15, 10))
     for model, label in zip(keras_models, labels):
         plt.plot(model._model.history.history[metric], label=label)
         plt.legend()
-    plt.title(title)
+    fig.suptitle(title)
     return

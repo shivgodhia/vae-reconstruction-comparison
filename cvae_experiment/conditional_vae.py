@@ -4,7 +4,7 @@ from keras.layers import (Input, Dropout, Concatenate,
 from keras import backend as K
 from keras.models import Model
 from keras.losses import mean_squared_error
-from keras.metrics import mse, mae as mse_metric, mae_metric
+from keras.metrics import mse as mse_metric, mae as mae_metric
 import numpy as np
 
 from encoder import Encoder

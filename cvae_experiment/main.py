@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from keras import metrics
@@ -57,10 +58,11 @@ vae_mmd._model.history.history
 #     return
 
 
-u.plot_training_history([vae_mmd, cvae_kl, vae_kl, cvae_mmd], 'mean_squared_error', ['VAE-mmd', 'CVAE-kl', 'VAE-kl', 'CVAE-mmd'], "Comparison of Reconstruction Loss (MSE) between VAEs and CVAEs")
 
-u.plot_training_history([vae_mmd, cvae_kl, vae_kl, cvae_mmd], 'mean_absolute_error', [
-                        'VAE-mmd', 'CVAE-kl', 'VAE-kl', 'CVAE-mmd'], "Comparison of Reconstruction Loss (MAE) between VAEs and CVAEs")
+
+u.plot_training_history([vae_kl, vae_mmd, cvae_mmd, cvae_kl], 'mean_squared_error', ['VAE-kl', 'VAE-mmd', 'CVAE-mmd', 'CVAE-kl'], "Comparison of Reconstruction Loss (MSE) between VAEs and CVAEs")
+
+u.plot_training_history([vae_kl, vae_mmd, cvae_mmd, cvae_kl], 'mean_absolute_error', ['VAE-kl', 'VAE-mmd', 'CVAE-mmd', 'CVAE-kl' ], "Comparison of Reconstruction Loss (MAE) between VAEs and CVAEs")
 
 
 '''
