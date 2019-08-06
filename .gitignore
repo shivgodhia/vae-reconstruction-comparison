@@ -106,6 +106,7 @@ venv.bak/
 
 # My addition
 stud_data.csv
+.DS_Store
 venv/
 .venv/
 dp/

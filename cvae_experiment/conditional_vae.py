@@ -4,7 +4,7 @@ from keras.layers import (Input, Dropout, Concatenate,
 from keras import backend as K
 from keras.models import Model
 from keras.losses import mean_squared_error
-from keras.metrics import mse as mse_metric
+from keras.metrics import mse as mse_metric, mae as mae_metric
 import numpy as np
 
 from encoder import Encoder
@@ -46,6 +46,27 @@ class CVAE(Encoder):
                  activation='relu',
                  loss='kl',
                  lr=1e-3,):
+        """[summary]
+        
+        :param n_features: [description]
+        :type n_features: [type]
+        :param n_categories: [description]
+        :type n_categories: [type]
+        :param latent_dim: [description]
+        :type latent_dim: [type]
+        :param intermediate_dims: [description]
+        :type intermediate_dims: [type]
+        :param drop_out: [description], defaults to 0.2
+        :type drop_out: float, optional
+        :param activation: [description], defaults to 'relu'
+        :type activation: str, optional
+        :param loss: [description], defaults to 'kl'
+        :type loss: str, optional
+        :param lr: [description], defaults to 1e-3
+        :type lr: [type], optional
+        :return: [description]
+        :rtype: [type]
+        """
 
         self.latent_dim = latent_dim
         self.n_features = n_features
@@ -87,8 +108,12 @@ class CVAE(Encoder):
 
         self._model = Model([X, cond], outputs)
         
-        def mse(input, output):
-            return mse_metric(X, outputs)
+        # custom metric
+        def mean_squared_error(input, output):
+            return mse_metric(X, output)
+        
+        def mean_absolute_error(input, output):
+            return mae_metric(X, output)
 
         def _model_loss(x, x_decoded_mean):
             xent_loss = mean_squared_error(X, x_decoded_mean)
@@ -102,5 +127,8 @@ class CVAE(Encoder):
                 loss_value = K.mean(xent_loss + divergence)
             return loss_value
 
-        self._model.compile(optimizer='Adam', loss=_model_loss, metrics=mse)
+        # self._model.compile(optimizer='Adam', loss=_model_loss, metrics=[mse])
+        # TODO: need to change the MSE for this to the custom model above
+        self._model.compile(optimizer='Adam', loss=_model_loss,
+                            metrics=[mean_squared_error, mean_absolute_error])
         self._model.summary()

@@ -61,8 +61,9 @@ class VAE(Encoder):
 
         # instantiate encoder model
         self._encoder = Model(inputs, z_mean, name='encoder')
-        
+
         def sampling(args):
+            
             z_mean, z_log_var = args
             batch = K.shape(z_mean)[0]
             dim = K.int_shape(z_mean)[1]
@@ -84,8 +85,7 @@ class VAE(Encoder):
 
         def _model_loss(x, x_decoded_mean):
             xent_loss = mean_squared_error(x, x_decoded_mean)
-            kl_loss = - 0.5 * K.mean(1 + z_log_var - K.square(z_mean)
-                                     - K.exp(z_log_var))
+            kl_loss = - 0.5 * K.mean(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var))
             true_z = K.random_normal(K.stack([K.shape(z_mean)[0], self.latent_dim]))
             divergence = 0.1 * compute_mmd(true_z, z)
             if loss == 'kl':
@@ -94,5 +94,6 @@ class VAE(Encoder):
                 loss_value = K.mean(xent_loss + divergence)
             return loss_value
 
-        self._model.compile(optimizer='Adam', loss=_model_loss, metrics='mse')
+        self._model.compile(
+            optimizer='Adam', loss=_model_loss, metrics=[metrics.mse, metrics.mae])
         self._model.summary()
