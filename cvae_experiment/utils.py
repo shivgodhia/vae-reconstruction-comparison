@@ -82,11 +82,6 @@ def plot_weld_location_ls(i, list_id, X, vae, overlay, **kwarg):
 
 
 def plot_training_history(keras_models, metric, labels, title):
-    '''
-    keras_models: list of keras models
-    metric: the name of the metric to plot
-    labels: list of model names
-    '''
     fig = plt.figure(figsize=(15, 10))
     for model, label in zip(keras_models, labels):
         plt.plot(model._model.history.history[metric], label=label)

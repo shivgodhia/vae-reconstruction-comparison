@@ -63,6 +63,7 @@ class VAE(Encoder):
         self._encoder = Model(inputs, z_mean, name='encoder')
 
         def sampling(args):
+            
             z_mean, z_log_var = args
             batch = K.shape(z_mean)[0]
             dim = K.int_shape(z_mean)[1]
