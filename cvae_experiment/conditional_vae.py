@@ -4,7 +4,7 @@ from keras.layers import (Input, Dropout, Concatenate,
 from keras import backend as K
 from keras.models import Model
 from keras.losses import mean_squared_error
-from keras.metrics import mse as mse_metric
+from keras.metrics import mse, mae as mse_metric, mae_metric
 import numpy as np
 
 from encoder import Encoder
@@ -88,8 +88,11 @@ class CVAE(Encoder):
         self._model = Model([X, cond], outputs)
         
         # custom metric
-        # def mse(input, output):
-        #     return mse_metric(X, output)
+        def mean_squared_error(input, output):
+            return mse_metric(X, output)
+        
+        def mean_absolute_error(input, output):
+            return mae_metric(X, output)
 
         def _model_loss(x, x_decoded_mean):
             xent_loss = mean_squared_error(X, x_decoded_mean)
@@ -105,5 +108,6 @@ class CVAE(Encoder):
 
         # self._model.compile(optimizer='Adam', loss=_model_loss, metrics=[mse])
         # TODO: need to change the MSE for this to the custom model above
-        self._model.compile(optimizer='Adam', loss=_model_loss, metrics=['mse'])
+        self._model.compile(optimizer='Adam', loss=_model_loss,
+                            metrics=[mean_squared_error, mean_absolute_error])
         self._model.summary()

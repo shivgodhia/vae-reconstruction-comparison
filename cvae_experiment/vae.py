@@ -93,5 +93,6 @@ class VAE(Encoder):
                 loss_value = K.mean(xent_loss + divergence)
             return loss_value
 
-        self._model.compile(optimizer='Adam', loss=_model_loss, metrics=["mse"])
+        self._model.compile(
+            optimizer='Adam', loss=_model_loss, metrics=[metrics.mse, metrics.mae])
         self._model.summary()

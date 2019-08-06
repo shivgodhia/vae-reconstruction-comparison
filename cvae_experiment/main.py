@@ -12,25 +12,64 @@ X, cond, sub_df = u.build_training_set(stud_data, 300)
 
 X_train, X_test, cond_train, cond_test = train_test_split(X, cond,test_size=0.2)
 
-# Instanciate and train a cvae with kl loss
-cvae = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='kl')
-cvae._model.fit(x=[X_train, cond_train], y=X_train, validation_data=([X_test, cond_test], X_test), epochs=3, batch_size=1000)
+# NOTE: We are using cvae-kl and vae-mmd, the rest are for testing
+
+# Instantiate and train a cvae with kl loss
+cvae_kl = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='kl')
+cvae_kl._model.fit(x=[X_train, cond_train], y=X_train, validation_data=([X_test, cond_test], X_test), epochs=3, batch_size=1000)
 
 
-# Instanciate and train a vae with mmd losst
-vae = VAE(X.shape[1], 2, [4], drop_out=0.2, loss='mmd')
-vae.fit(X_train, X_test, batch_size=000, epochs=3)
+# Instantiate and train a vae with mmd loss
+vae_mmd = VAE(X.shape[1], 2, [4], drop_out=0.2, loss='mmd')
+vae_mmd.fit(X_train, X_test, batch_size=1000, epochs=3)
+
+
+# Instantiate and train a cvae with mmd loss
+cvae_mmd = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='mmd')
+cvae_mmd._model.fit(x=[X_train, cond_train], y=X_train, validation_data=(
+    [X_test, cond_test], X_test), epochs=3, batch_size=1000)
+
+
+# Instanciate and train a vae with kl loss
+vae_kl = VAE(X.shape[1], 2, [4], drop_out=0.2, loss='kl')
+vae_kl.fit(X_train, X_test, batch_size=1000, epochs=3)
 
 
 # Plot latent spaces for both models
-u.plot_latent_space([X, cond], cvae,
-                    [sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'CVAE_kl',
-                    s=1)
-u.plot_latent_space(X, vae,
+u.plot_latent_space([X, cond], cvae_kl,[sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'CVAE_kl',s=1)
+u.plot_latent_space(X, vae_mmd,
                     [sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'VAE_mmd',
                     s=1) 
 
+# get the plots of the training history (loss over time) and metric (metric over time)
+vae_mmd._model.history.history
 
+# def new_plot_training_history(keras_models, metrics, labels, title):
+#     '''
+#     keras_models: list of keras models
+#     metric: the name of the metric to plot
+#     labels: list of model names
+#     '''
+#     for model, metric, label in zip(keras_models, metrics, labels):
+#         plt.plot(model._model.history.history[metric], label=label)
+#         plt.legend()
+#     plt.title(title)
+#     return
+
+
+u.plot_training_history([vae_mmd, cvae_kl, vae_kl, cvae_mmd], 'mean_squared_error', ['VAE-mmd', 'CVAE-kl', 'VAE-kl', 'CVAE-mmd'], "Comparison of Reconstruction Loss (MSE) between VAEs and CVAEs")
+
+u.plot_training_history([vae_mmd, cvae_kl, vae_kl, cvae_mmd], 'mean_absolute_error', [
+                        'VAE-mmd', 'CVAE-kl', 'VAE-kl', 'CVAE-mmd'], "Comparison of Reconstruction Loss (MAE) between VAEs and CVAEs")
+
+
+'''
+mae metric in addition to mse
+try other combinations of loss functions: kl, mmd
+    Title: VAE vs CVAE reconstruction loss
+    
+
+'''
 
 # compare the reconstruction loss between the VAE and the CVAE. 
 # My assumption is that the CVAE allows a better reconstruction of the original parameters.
