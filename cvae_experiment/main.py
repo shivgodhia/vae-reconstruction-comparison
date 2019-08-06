@@ -42,36 +42,13 @@ u.plot_latent_space(X, vae_mmd,
                     [sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'VAE_mmd',
                     s=1) 
 
-# get the plots of the training history (loss over time) and metric (metric over time)
-vae_mmd._model.history.history
-
-# def new_plot_training_history(keras_models, metrics, labels, title):
-#     '''
-#     keras_models: list of keras models
-#     metric: the name of the metric to plot
-#     labels: list of model names
-#     '''
-#     for model, metric, label in zip(keras_models, metrics, labels):
-#         plt.plot(model._model.history.history[metric], label=label)
-#         plt.legend()
-#     plt.title(title)
-#     return
-
-
+# plot training history (loss over time) and metric (metric over time)
 
 
 u.plot_training_history([vae_kl, vae_mmd, cvae_mmd, cvae_kl], 'mean_squared_error', ['VAE-kl', 'VAE-mmd', 'CVAE-mmd', 'CVAE-kl'], "Comparison of Reconstruction Loss (MSE) between VAEs and CVAEs")
 
 u.plot_training_history([vae_kl, vae_mmd, cvae_mmd, cvae_kl], 'mean_absolute_error', ['VAE-kl', 'VAE-mmd', 'CVAE-mmd', 'CVAE-kl' ], "Comparison of Reconstruction Loss (MAE) between VAEs and CVAEs")
 
-
-'''
-mae metric in addition to mse
-try other combinations of loss functions: kl, mmd
-    Title: VAE vs CVAE reconstruction loss
-    
-
-'''
 
 # compare the reconstruction loss between the VAE and the CVAE. 
 # My assumption is that the CVAE allows a better reconstruction of the original parameters.
