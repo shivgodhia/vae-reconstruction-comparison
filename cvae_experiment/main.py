@@ -43,9 +43,7 @@ vae_kl.fit(X_train, X_test, batch_size=batch_size, epochs=num_epochs)
 
 # Plot latent spaces for both models
 u.plot_latent_space([X, cond], cvae_kl,[sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'CVAE_kl',s=1)
-u.plot_latent_space(X, vae_mmd,
-                    [sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'VAE_mmd',
-                    s=1) 
+u.plot_latent_space(X, vae_mmd,[sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'VAE_mmd',s=1) 
 
 # plot training history (loss over time) and metric (metric over time)
 

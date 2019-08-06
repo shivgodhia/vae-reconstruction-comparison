@@ -46,6 +46,27 @@ class CVAE(Encoder):
                  activation='relu',
                  loss='kl',
                  lr=1e-3,):
+        """[summary]
+        
+        :param n_features: [description]
+        :type n_features: [type]
+        :param n_categories: [description]
+        :type n_categories: [type]
+        :param latent_dim: [description]
+        :type latent_dim: [type]
+        :param intermediate_dims: [description]
+        :type intermediate_dims: [type]
+        :param drop_out: [description], defaults to 0.2
+        :type drop_out: float, optional
+        :param activation: [description], defaults to 'relu'
+        :type activation: str, optional
+        :param loss: [description], defaults to 'kl'
+        :type loss: str, optional
+        :param lr: [description], defaults to 1e-3
+        :type lr: [type], optional
+        :return: [description]
+        :rtype: [type]
+        """
 
         self.latent_dim = latent_dim
         self.n_features = n_features
