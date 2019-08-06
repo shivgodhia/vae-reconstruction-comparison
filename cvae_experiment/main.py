@@ -6,6 +6,11 @@ from vae import VAE
 from conditional_vae import CVAE
 import utils as u
 
+# initialise some variables
+num_epochs = 10
+batch_size = 1000
+
+
 # Load Data 
 stud_data = pd.read_csv('stud_data.csv')
 
@@ -17,23 +22,23 @@ X_train, X_test, cond_train, cond_test = train_test_split(X, cond,test_size=0.2)
 
 # Instantiate and train a cvae with kl loss
 cvae_kl = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='kl')
-cvae_kl._model.fit(x=[X_train, cond_train], y=X_train, validation_data=([X_test, cond_test], X_test), epochs=3, batch_size=1000)
+cvae_kl._model.fit(x=[X_train, cond_train], y=X_train, validation_data=([X_test, cond_test], X_test), epochs=num_epochs, batch_size=batch_size)
 
 
 # Instantiate and train a vae with mmd loss
 vae_mmd = VAE(X.shape[1], 2, [4], drop_out=0.2, loss='mmd')
-vae_mmd.fit(X_train, X_test, batch_size=1000, epochs=3)
+vae_mmd.fit(X_train, X_test, batch_size=batch_size, epochs=num_epochs)
 
 
 # Instantiate and train a cvae with mmd loss
 cvae_mmd = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='mmd')
 cvae_mmd._model.fit(x=[X_train, cond_train], y=X_train, validation_data=(
-    [X_test, cond_test], X_test), epochs=3, batch_size=1000)
+    [X_test, cond_test], X_test), epochs=num_epochs, batch_size=batch_size)
 
 
 # Instanciate and train a vae with kl loss
 vae_kl = VAE(X.shape[1], 2, [4], drop_out=0.2, loss='kl')
-vae_kl.fit(X_train, X_test, batch_size=1000, epochs=3)
+vae_kl.fit(X_train, X_test, batch_size=batch_size, epochs=num_epochs)
 
 
 # Plot latent spaces for both models
