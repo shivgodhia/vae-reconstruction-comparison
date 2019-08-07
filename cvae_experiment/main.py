@@ -45,7 +45,7 @@ u.plot_latent_space([X, cond], cvae_kl,[sub_df['StudID'], sub_df['quality'], sub
 u.plot_latent_space(X, vae_mmd,[sub_df['StudID'], sub_df['quality'], sub_df['Penetration act']], 'VAE_mmd',s=1) 
 
 # plot training history (loss over time) and metric (metric over time)
-u.plot_weld_location_ls()
+
 
 u.plot_training_history([vae_kl, vae_mmd, cvae_mmd, cvae_kl], 'mean_squared_error', ['VAE-kl', 'VAE-mmd', 'CVAE-mmd', 'CVAE-kl'], "Comparison of Reconstruction Loss (MSE) between VAEs and CVAEs")
 
