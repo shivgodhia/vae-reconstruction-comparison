@@ -13,6 +13,7 @@ from encoder import Encoder
 TRAIN_LOSS_KEY = 'loss'
 VAL_LOSS_KEY = 'val_loss'
 
+ 
 
 def compute_kernel(x, y):
     """Implementation from Shengjia Zhao MMD Variational Autoencoder 
@@ -45,7 +46,25 @@ class VAE(Encoder):
                  activation='relu',
                  loss='kl',
                  lr=1e-3,):
+        """[summary]
 
+        :param n_features: number of features
+        :type n_features: int
+        :param latent_dim: latent dimension
+        :type latent_dim: int
+        :param intermediate_dims: intermediate dimension
+        :type intermediate_dims: int
+        :param drop_out: probability of some units being dropped to prevent overfitting, defaults to 0.2
+        :type drop_out: float
+        :param activation: activation function, defaults to 'relu'
+        :type activation: str
+        :param loss: loss function, defaults to 'kl'
+        :type loss: str
+        :param lr: learning rate, defaults to 1e-3
+        :type lr: float
+        :return: VAE model
+        :rtype: vae.VAE
+        """
         self.latent_dim = latent_dim
         self.n_features = n_features
 
@@ -63,7 +82,13 @@ class VAE(Encoder):
         self._encoder = Model(inputs, z_mean, name='encoder')
 
         def sampling(args):
+            """ sampling from latent space
             
+            :param args: probability distribution of latent space
+            :type args: 2D list
+            :return: sample in latent distribution
+            :rtype: float
+            """
             z_mean, z_log_var = args
             batch = K.shape(z_mean)[0]
             dim = K.int_shape(z_mean)[1]
@@ -72,7 +97,8 @@ class VAE(Encoder):
 
         z = Lambda(sampling, output_shape=(latent_dim,),
                    name='z')([z_mean, z_log_var])
-
+            """Converting distribution into layer
+            """
         x = z
         intermediate_dims.reverse()
         for dim in intermediate_dims:
@@ -84,6 +110,15 @@ class VAE(Encoder):
         self._model = Model(inputs, ouputs)
 
         def _model_loss(x, x_decoded_mean):
+            """creating loss function for VAE using mean squared error / kl
+            
+            :param x: VAE input
+            :type x: list
+            :param x_decoded_mean: mean of VAE output
+            :type x_decoded_mean: float
+            :return: reconstruction loss value based on selected loss metric (mse/kl)
+            :rtype: float
+            """
             xent_loss = mean_squared_error(x, x_decoded_mean)
             kl_loss = - 0.5 * K.mean(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var))
             true_z = K.random_normal(K.stack([K.shape(z_mean)[0], self.latent_dim]))
