@@ -13,6 +13,7 @@ from encoder import Encoder
 TRAIN_LOSS_KEY = 'loss'
 VAL_LOSS_KEY = 'val_loss'
 
+ 
 
 def compute_kernel(x, y):
     """Implementation from Shengjia Zhao MMD Variational Autoencoder 
