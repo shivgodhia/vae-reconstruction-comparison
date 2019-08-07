@@ -10,30 +10,45 @@ There is a file ***stud_data.csv*** which needs to be downloaded and placed into
 
 ### Virtual Environment
 
-1. Install virtualenv if you haven't already got it
+Install virtualenv if you haven't already got it
+   
 ```bash
 pip3 install virtualenv
 ```
-2. Navigate to the right directory
+
+Navigate to the right directory
 
 ```bash
 cd cvae_experiment
 ```
-3. Create your virtual environment, name it venv
+
+Create your virtual environment, name it venv
+   
 ```bash
 python3 -m virtualenv venv
 ```
-4. Activate the virtualenv
+
+Activate virtual environment
+   
 ```bash
 source venv/bin/activate
 # If this does not work, ensure you are in cvae_experiment directory
 which pip3
 which python3
 # these should show that pip3 and python3 exist in your venv folder which means the virtualenv is working, otherwise something went wrong
-
 ```
 
-5. Install required python3 packages
+Install required python3 packages
+   
 ```bash
 pip3 install -r requirements.txt
 ``` 
+
+If you just want to copy-paste all the code:
+
+```bash
+pip3 install virtualenv
+cd cvae_experiment
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
