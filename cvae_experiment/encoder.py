@@ -16,6 +16,21 @@ class Encoder(object):
     def fit(self, X_train, X_test, epochs=10,
             batch_size=1000, patience=5, callbacks=[],
             **kwargs):
+            """Trains the model for a given number of epochs (iterations on a dataset).
+            
+            :param X_train: training data. Note that this is also the target because this class describes an autoencoder
+            :type X_train: numpy.ndarray
+            :param X_test: test data, to be used as validation data
+            :type X_test: numpy.ndarray
+            :param epochs: Number of epochs to train the model, defaults to 10. An epoch is an iteration over the entire x and y provided. Note that epochs is to be understood as "final epoch". The model is not trained for a number of iterations given by epochs, but merely until the epoch of index epochs is reached.
+            :type epochs: int, optional
+            :param batch_size: Number of samples per gradient update, defaults to 1000
+            :type batch_size: int, optional
+            :param patience: number of epochs with no improvement after which training will be stopped, defaults to 5
+            :type patience: int, optional
+            :param callbacks: List of callbacks to apply during training and validation, defaults to []
+            :type callbacks: list of keras.callbacks.Callback instances, optional
+            """
         early_stop = EarlyStopping(monitor=VAL_LOSS_KEY, min_delta=0,
                                    patience=patience, verbose=1)
         callbacks.append(early_stop)
