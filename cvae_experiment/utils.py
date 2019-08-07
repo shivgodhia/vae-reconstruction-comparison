@@ -8,7 +8,6 @@ controllable_params = ['Lift Height act', 'WeldTime Act',  'Stickout', 'WeldCurr
 noncontrollable_params = ['DropTime act', 'Pilot WeldCurrent Arc Voltage Act', 'Weld Energy act']
 features = controllable_params + noncontrollable_params
 
-
 def get_most_populated_weld_location(list_id, n):
     """Returns the n most common ids in list_id
     
