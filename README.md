@@ -24,21 +24,19 @@ rm -rf venv
 ```
 
 (optional) Install virtualenv if you haven't already got it
-   
+
 ```bash
 pip3 install virtualenv
 ```
 
-
-
 Create your virtual environment, name it venv
-   
+
 ```bash
 python3 -m virtualenv venv
 ```
 
 Activate virtual environment
-   
+
 ```bash
 source venv/bin/activate
 # If this does not work, ensure you are in cvae_experiment directory
@@ -48,10 +46,10 @@ which python3
 ```
 
 Install required python3 packages
-   
+
 ```bash
 pip3 install -r requirements.txt
-``` 
+```
 
 If you just want to copy-paste all the code:
 
