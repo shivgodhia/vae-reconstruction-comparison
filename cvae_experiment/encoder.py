@@ -44,15 +44,39 @@ class Encoder(object):
     def fit_generator(self, train_generator, test_generator,
                       n_samples, batch_size, epochs, validation_steps,
                       **kwargs):
+        """Trains the model on data generated batch-by-batch by a Python generator (or an instance of Sequence).
+        
+        :param train_generator: A generator in order to avoid duplicate data when using multiprocessing. The output of the generator must be either
+        - a tuple (inputs, targets)
+        - a tuple (inputs, targets, sample_weights).
+        This tuple (a single output of the generator) makes a single batch. Therefore, all arrays in this tuple must have the same length (equal to the size of this batch). Different batches may have different sizes. For example, the last batch of the epoch is commonly smaller than the others, if the size of the dataset is not divisible by the batch size. The generator is expected to loop over its data indefinitely. An epoch finishes when steps_per_epoch batches have been seen by the model.
+        :type train_generator: generator
+        :param test_generator: Generates test data on which to evaluate the loss and any model metrics at the end of each epoch. The model will not be trained on this data.
+        :type test_generator: generator
+        :param n_samples: number of samples
+        :type n_samples: int
+        :param batch_size: Number of samples per gradient update
+        :type batch_size: int
+        :param epochs: Number of epochs to train the model. An epoch is an iteration over the entire x and y provided. Note that epochs is to be understood as "final epoch". The model is not trained for a number of iterations given by epochs, but merely until the epoch of index epochs is reached.
+        :type epochs: int
+        :param validation_steps: Total number of steps (batches of samples) to validate before stopping.
+        :type validation_steps: int
+        """
         self._model.fit_generator(train_generator,
                                   epochs=epochs,
-                                  steps_per_epoch=math.ceil(n_samples /
-                                                            batch_size),
+                                  steps_per_epoch=math.ceil(n_samples /batch_size),
                                   validation_data=test_generator,
                                   validation_steps=validation_steps,
                                   **kwargs)
 
     def predict(self, X):
+        """Generates output predictions for the input samples.
+        
+        :param X: input samples
+        :type X: numpy.ndarray (or list of Numpy arrays if the model has multiple inputs)
+        :return: predictions
+        :rtype: numpy.ndarray
+        """
         return self._model.predict(X)
 
     def encode(self, X):
