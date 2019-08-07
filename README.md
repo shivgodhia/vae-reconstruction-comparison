@@ -10,17 +10,26 @@ There is a file ***stud_data.csv*** which needs to be downloaded and placed into
 
 ### Virtual Environment
 
-Install virtualenv if you haven't already got it
-   
-```bash
-pip3 install virtualenv
-```
-
 Navigate to the right directory
 
 ```bash
 cd cvae_experiment
 ```
+
+(optional) Remove your old virtual environment
+
+```bash
+rm -rf venv
+# venv can be replaced with the name of your virtual environment folder
+```
+
+(optional) Install virtualenv if you haven't already got it
+   
+```bash
+pip3 install virtualenv
+```
+
+
 
 Create your virtual environment, name it venv
    
@@ -49,6 +58,7 @@ If you just want to copy-paste all the code:
 ```bash
 pip3 install virtualenv
 cd cvae_experiment
+python3 -m virtualenv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 ```
