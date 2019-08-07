@@ -48,15 +48,15 @@ def build_training_set(stud_data, n):
 def plot_latent_space(X, vae, overlays, title, n_max=200000, **kwarg):
     """Plots the latent space along with an overlay
     
-    :param X: [description]
-    :type X: list
+    :param X: scaled numerical features
+    :type X: list or numpy.dfarray
     :param vae: [description]
     :type vae: vae.VAE
     :param overlays: list of overlays
     :type overlays: list
-    :param title: [description]
-    :type title: [type]
-    :param n_max: [description], defaults to 200000
+    :param title: title of the whole plot
+    :type title: string
+    :param n_max: number of datapoints to plot, defaults to 200000
     :type n_max: int, optional
     """
     len_X = len(X[0]) if type(X) == list else len(X)
