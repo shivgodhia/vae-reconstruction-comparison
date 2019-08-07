@@ -1,12 +1,10 @@
 from keras.layers.core import Dense, Lambda
-from keras.layers import (Input, Dropout, BatchNormalization,
-                          Activation)
+from keras.layers import (Input, Dropout, BatchNormalization, Activation)
 from keras import backend as K
 from keras.models import Model
 from keras.losses import mean_squared_error
 import numpy as np
 from keras import metrics
-
 from encoder import Encoder
 
 

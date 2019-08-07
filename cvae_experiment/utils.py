@@ -8,21 +8,33 @@ controllable_params = ['Lift Height act', 'WeldTime Act',  'Stickout', 'WeldCurr
 noncontrollable_params = ['DropTime act', 'Pilot WeldCurrent Arc Voltage Act', 'Weld Energy act']
 features = controllable_params + noncontrollable_params
 
-
 def get_most_populated_weld_location(list_id, n):
+    """Returns the n most common ids in list_id
+    
+    :param list_id: list of ids
+    :type list_id: pandas.core.series.Series
+    :param n: number of ids
+    :type n: int
+    :return: list of ids
+    :rtype: list
+    """
     count = list_id.value_counts()
     return list(count.iloc[:n].index)
 
 
 def build_training_set(stud_data, n):
-    '''
-    Extract the relevant features from the top n most populated weld locations.
-    Extracted features:
-        X: numpy array with scaled numerical features
-        cond: One hot encoded vectors for the weld location ID
-        sub_df[['StudID', 'quality', 'Penetration act']]: Pandas Data Frame with columns 
-                                                          that can be used as overlay in the latent space.
-    '''
+    """Extract the relevant features from the top n most populated weld locations.
+    
+    :param stud_data: data from stud_data.csv
+    :type stud_data: pandas.core.frame.DataFrame
+    :param n: number of weld locations to extract features from
+    :type n: int
+    :return: [description]
+    :returns:
+        - X (:py:class:`numpy.ndarray`) - numpy array with scaled numerical features
+        - cond (:py:class:`numpy.ndarray`) - One hot encoded vectors for the weld location ID
+        - sub_df[['StudID', 'quality', 'Penetration act']] (:py:class:`pandas.core.frame.DataFrame`) - Pandas Data Frame with columns that can be used as overlay in the latent space
+    """
     list_wl = get_most_populated_weld_location(stud_data['StudID'], n)
     sub_df = stud_data.loc[stud_data['StudID'].isin(list_wl)]
     X = sub_df[features]
@@ -33,6 +45,19 @@ def build_training_set(stud_data, n):
 
 
 def plot_latent_space(X, vae, overlays, title, n_max=200000, **kwarg):
+    """Plots the latent space along with an overlay
+    
+    :param X: scaled numerical features
+    :type X: list of numpy.dfarray, or numpy.dfarray
+    :param vae: trained (fitted) variational autoencoder object
+    :type vae: vae.VAE
+    :param overlays: list of overlays
+    :type overlays: list
+    :param title: title of the whole plot
+    :type title: string
+    :param n_max: number of datapoints to plot, defaults to 200000
+    :type n_max: int, optional
+    """
     len_X = len(X[0]) if type(X) == list else len(X)
     ind = np.arange(len_X)
     if len_X > n_max:
@@ -60,6 +85,19 @@ def plot_latent_space(X, vae, overlays, title, n_max=200000, **kwarg):
 
 
 def plot_weld_location_ls(i, list_id, X, vae, overlay, **kwarg):
+    """[summary]
+    
+    :param i: index into an array of unique weld locations
+    :type i: int
+    :param list_id: list of ids
+    :type list_id: pandas.core.series.Series
+    :param X: scaled numerical features
+    :type X: list of numpy.dfarray, or numpy.dfarray
+    :param vae: trained (fitted) variational autoencoder object
+    :type vae: vae.VAE
+    :param overlays: list of overlays
+    :type overlays: list
+    """
     lis_id_unique = np.unique(list_id)
     mask = list_id == lis_id_unique[i]
     if type(X) == list:
