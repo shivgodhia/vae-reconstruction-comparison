@@ -49,8 +49,8 @@ def plot_latent_space(X, vae, overlays, title, n_max=200000, **kwarg):
     """Plots the latent space along with an overlay
     
     :param X: scaled numerical features
-    :type X: list or numpy.dfarray
-    :param vae: [description]
+    :type X: list of numpy.dfarray, or numpy.dfarray
+    :param vae: trained (fitted) variational autoencoder object
     :type vae: vae.VAE
     :param overlays: list of overlays
     :type overlays: list
@@ -86,6 +86,19 @@ def plot_latent_space(X, vae, overlays, title, n_max=200000, **kwarg):
 
 
 def plot_weld_location_ls(i, list_id, X, vae, overlay, **kwarg):
+    """[summary]
+    
+    :param i: index into an array of unique weld locations
+    :type i: int
+    :param list_id: list of ids
+    :type list_id: pandas.core.series.Series
+    :param X: scaled numerical features
+    :type X: list of numpy.dfarray, or numpy.dfarray
+    :param vae: trained (fitted) variational autoencoder object
+    :type vae: vae.VAE
+    :param overlays: list of overlays
+    :type overlays: list
+    """
     lis_id_unique = np.unique(list_id)
     mask = list_id == lis_id_unique[i]
     if type(X) == list:
