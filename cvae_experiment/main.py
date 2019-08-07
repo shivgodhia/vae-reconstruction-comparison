@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from keras import metrics
@@ -6,7 +7,7 @@ from conditional_vae import CVAE
 import utils as u
 
 # initialise some variables
-num_epochs = 1
+num_epochs = 10
 batch_size = 1000
 
 

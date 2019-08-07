@@ -128,6 +128,7 @@ class CVAE(Encoder):
             return loss_value
 
         # self._model.compile(optimizer='Adam', loss=_model_loss, metrics=[mse])
+        # TODO: need to change the MSE for this to the custom model above
         self._model.compile(optimizer='Adam', loss=_model_loss,
                             metrics=[mean_squared_error, mean_absolute_error])
         self._model.summary()
