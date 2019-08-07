@@ -110,7 +110,7 @@ class CVAE(Encoder):
         def sampling(args):
             """ Sample from the latent variable
             
-            :param args: probability distribution in the latent space
+            :param args: probability distribution in the latent space / bottleneck layer
             :type args: 2D list
             :return: a sample from the latent space distribution
             :rtype: float
