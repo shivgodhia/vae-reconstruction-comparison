@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/Users/xiaojianzhou/Documents/GitHub/vae-reconstruction-comparison/cvae_experiment/venv/bin/python2.7"
+
+    "python.pythonPath": "venv/bin/python3.7"
+
 }
