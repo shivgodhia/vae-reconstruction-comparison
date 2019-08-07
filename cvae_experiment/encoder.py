@@ -8,6 +8,16 @@ VAL_LOSS_KEY = 'val_loss'
 
 
 class Encoder(object):
+    """Encoder class used as a base class for other autoencoder classes e.g. VAE, CVAE, etc.
+    Defines functions common to autoencoders:
+    - fit
+    - fit_generator
+    - predict
+    - encode
+    - save
+    - load
+    Note that self._encoder and self._model need to be defined in the wrapper class for the autoencoders
+    """
 
     def post_init(self):
         print(f'Initialised {self.__class__.__name__}:')
@@ -16,21 +26,21 @@ class Encoder(object):
     def fit(self, X_train, X_test, epochs=10,
             batch_size=1000, patience=5, callbacks=[],
             **kwargs):
-            """Trains the model for a given number of epochs (iterations on a dataset).
-            
-            :param X_train: training data. Note that this is also the target because this class describes an autoencoder
-            :type X_train: numpy.ndarray
-            :param X_test: test data, to be used as validation data
-            :type X_test: numpy.ndarray
-            :param epochs: Number of epochs to train the model, defaults to 10. An epoch is an iteration over the entire x and y provided. Note that epochs is to be understood as "final epoch". The model is not trained for a number of iterations given by epochs, but merely until the epoch of index epochs is reached.
-            :type epochs: int, optional
-            :param batch_size: Number of samples per gradient update, defaults to 1000
-            :type batch_size: int, optional
-            :param patience: number of epochs with no improvement after which training will be stopped, defaults to 5
-            :type patience: int, optional
-            :param callbacks: List of callbacks to apply during training and validation, defaults to []
-            :type callbacks: list of keras.callbacks.Callback instances, optional
-            """
+        """Trains the model for a given number of epochs (iterations on a dataset).
+        
+        :param X_train: training data. Note that this is also the target because this class describes an autoencoder
+        :type X_train: numpy.ndarray
+        :param X_test: test data, to be used as validation data
+        :type X_test: numpy.ndarray
+        :param epochs: Number of epochs to train the model, defaults to 10. An epoch is an iteration over the entire x and y provided. Note that epochs is to be understood as "final epoch". The model is not trained for a number of iterations given by epochs, but merely until the epoch of index epochs is reached.
+        :type epochs: int, optional
+        :param batch_size: Number of samples per gradient update, defaults to 1000
+        :type batch_size: int, optional
+        :param patience: number of epochs with no improvement after which training will be stopped, defaults to 5
+        :type patience: int, optional
+        :param callbacks: List of callbacks to apply during training and validation, defaults to []
+        :type callbacks: list of keras.callbacks.Callback instances, optional
+        """
         early_stop = EarlyStopping(monitor=VAL_LOSS_KEY, min_delta=0,
                                    patience=patience, verbose=1)
         callbacks.append(early_stop)
@@ -80,19 +90,46 @@ class Encoder(object):
         return self._model.predict(X)
 
     def encode(self, X):
+        """Encodes input sample to latent variables.
+        
+        :param X: input samples
+        :type X: numpy.ndarray (or list of Numpy arrays if the model has multiple inputs)
+        :return: encoded sample
+        :rtype: numpy.ndarray
+        """
         return self._encoder.predict(X)
 
     def save(self, path):
+        """Saves the model to the path, appending .h5 extension to it
+        
+        :param path: path
+        :type path: string
+        """
         self._model.save(f'{path}.h5')
         print(f'--> Model exported to: {path}.h5')
 
     def load(self, path):
+        """Loads the model from the path
+
+        :param path: path
+        :type path: string
+        """
         self._model = load_model(path)
 
     @property
     def training_loss_history(self):
+        """Returns training loss history
+
+        :return: training loss history
+        :rtype: numpy.ndarray
+        """
         return np.array(self._model.history.history[TRAIN_LOSS_KEY])
 
     @property
     def validation_loss_history(self):
+        """Returns validation loss history
+
+        :return: validation loss history
+        :rtype: numpy.ndarray
+        """
         return np.array(self._model.history.history[VAL_LOSS_KEY])
