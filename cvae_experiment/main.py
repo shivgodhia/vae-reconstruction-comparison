@@ -29,6 +29,7 @@ cvae_kl._model.fit(x=[X_train, cond_train], y=X_train, validation_data=([X_test,
 vae_mmd = VAE(X.shape[1], 2, [4], drop_out=0.2, loss='mmd')
 vae_mmd.fit(X_train, X_test, batch_size=batch_size, epochs=num_epochs)
 
+print(type(vae_mmd))
 
 # Instantiate and train a cvae with mmd loss
 cvae_mmd = CVAE(X.shape[1], cond.shape[1], 2, [64, 32], drop_out=0, loss='mmd')
