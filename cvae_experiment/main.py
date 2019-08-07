@@ -1,10 +1,10 @@
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from keras import metrics
 from vae import VAE
 from conditional_vae import CVAE
 import utils as u
-
 
 def main(num_epochs=10, batch_size=1000):
     """Instantiates, trains and plots the training history of a VAE and CVAE
