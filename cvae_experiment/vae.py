@@ -5,7 +5,6 @@ from keras.models import Model
 from keras.losses import mean_squared_error
 import numpy as np
 from keras import metrics
-
 from encoder import Encoder
 
 

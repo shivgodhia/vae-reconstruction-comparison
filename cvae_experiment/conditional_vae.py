@@ -15,8 +15,18 @@ VAL_LOSS_KEY = 'val_loss'
 
 
 def compute_kernel(x, y):
+    """ Applying the kernel to the i-th vector of  x, and  j-th vector of  y
+    
+    :param x: distribution over possible samples the encoder generates
+    :type x: layer
+    :param y: “prior” distribution of valid input to the decoder
+    :type y: layer
+    :return: list of x and y with kernel applied
+    :rtype: list
+    """
     """Implementation from Shengjia Zhao MMD Variational Autoencoder 
-    https://github.com/ShengjiaZhao/MMD-Variational-Autoencoder/blob/master/mmd__model.py#L62 """
+    https://github.com/ShengjiaZhao/MMD-Variational-Autoencoder/blob/master/mmd__model.py#L62 
+    """
     x_size = K.shape(x)[0]
     y_size = K.shape(y)[0]
     dim = K.shape(x)[1]
@@ -26,6 +36,15 @@ def compute_kernel(x, y):
 
 
 def compute_mmd(x, y):
+    """computing the mmd statistics
+    
+    :param x: distribution over possible samples the encoder generates
+    :type x: layer
+    :param y: “prior” distribution of valid input to the decoder
+    :type y: layer
+    :return: mmd value
+    :rtype: float
+    """
     """Implementation from Shengjia Zhao MMD Variational Autoencoder 
     https://github.com/ShengjiaZhao/MMD-Variational-Autoencoder/blob/master/mmd__model.py#L62 """
     x_kernel = compute_kernel(x, x)
@@ -46,26 +65,26 @@ class CVAE(Encoder):
                  activation='relu',
                  loss='kl',
                  lr=1e-3,):
-        """[summary]
+        """Instantiate and train a cvae with kl (default) or mmd loss
         
-        :param n_features: [description]
-        :type n_features: [type]
-        :param n_categories: [description]
-        :type n_categories: [type]
-        :param latent_dim: [description]
-        :type latent_dim: [type]
-        :param intermediate_dims: [description]
-        :type intermediate_dims: [type]
-        :param drop_out: [description], defaults to 0.2
+        :param n_features: number of features
+        :type n_features: int
+        :param n_categories: number of categories in the conditional variable
+        :type n_categories: int
+        :param latent_dim: latent dimension
+        :type latent_dim: list
+        :param intermediate_dims: neural network intermediate dimension
+        :type intermediate_dims: int
+        :param drop_out: percentage drop out, defaults to 0.2
         :type drop_out: float, optional
-        :param activation: [description], defaults to 'relu'
+        :param activation: activation function, defaults to 'relu'
         :type activation: str, optional
-        :param loss: [description], defaults to 'kl'
+        :param loss: loss function, defaults to 'kl'
         :type loss: str, optional
-        :param lr: [description], defaults to 1e-3
-        :type lr: [type], optional
-        :return: [description]
-        :rtype: [type]
+        :param lr: learning rate, defaults to 1e-3
+        :type lr: float, optional
+        :return: cvae model with the input parameters
+        :rtype: conditional_vae.CVAE
         """
 
         self.latent_dim = latent_dim
@@ -89,6 +108,13 @@ class CVAE(Encoder):
         self._encoder = Model([X, cond], z_mean, name='encoder')
         
         def sampling(args):
+            """ Sample from the latent variable
+            
+            :param args: probability distribution in the latent space / bottleneck layer
+            :type args: 2D list
+            :return: a sample from the latent space distribution
+            :rtype: float
+            """
             z_mean, z_log_var = args
             batch = K.shape(z_mean)[0]
             dim = K.int_shape(z_mean)[1]
@@ -110,12 +136,39 @@ class CVAE(Encoder):
         
         # custom metric
         def mean_squared_error(input, output):
+            """ metric of mean squared error applied to cvae
+            
+            :param input: input of the encoder/cvae (concatenation of features and conditional variable)
+            :type input: list
+            :param output: output of decoder/cvae
+            :type output: list
+            :return: mse of cvae
+            :rtype: float
+            """
             return mse_metric(X, output)
         
         def mean_absolute_error(input, output):
+            """ metric of mean absolute error applied to cvae
+            
+            :param input: input of the encoder/cvae (concatenation of features and conditional variable)
+            :type input: list
+            :param output: output of decoder/cvae
+            :type output: list
+            :return: mae of cvae
+            :rtype: float
+            """
             return mae_metric(X, output)
 
         def _model_loss(x, x_decoded_mean):
+            """ creating custom loss function/metrics
+            
+            :param x: input of the encoder/cvae (concatenation of features and conditional variable)
+            :type x: list
+            :param x_decoded_mean: mean of decoded output of cvae
+            :type x_decoded_mean: float
+            :return: terminal loss value of the selected loss function (kl or mmd)
+            :rtype: float
+            """
             xent_loss = mean_squared_error(X, x_decoded_mean)
             kl_loss = - 0.5 * K.mean(1 + z_log_var - K.square(z_mean)
                                      - K.exp(z_log_var))
@@ -128,7 +181,6 @@ class CVAE(Encoder):
             return loss_value
 
         # self._model.compile(optimizer='Adam', loss=_model_loss, metrics=[mse])
-        # TODO: need to change the MSE for this to the custom model above
         self._model.compile(optimizer='Adam', loss=_model_loss,
                             metrics=[mean_squared_error, mean_absolute_error])
         self._model.summary()
