@@ -97,8 +97,8 @@ class VAE(Encoder):
 
         z = Lambda(sampling, output_shape=(latent_dim,),
                    name='z')([z_mean, z_log_var])
-            """Converting distribution into layer
-            """
+        """Converting distribution into layer
+        """
         x = z
         intermediate_dims.reverse()
         for dim in intermediate_dims:
