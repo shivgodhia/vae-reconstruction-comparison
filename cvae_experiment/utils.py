@@ -120,7 +120,9 @@ def plot_weld_location_ls(i, list_id, X, vae, overlay, **kwarg):
 
 
 def plot_training_history(keras_models, metric, labels, title):
+    
     fig = plt.figure(figsize=(15, 10))
+    
     for model, label in zip(keras_models, labels):
         plt.plot(model._model.history.history[metric], label=label)
         plt.legend()
